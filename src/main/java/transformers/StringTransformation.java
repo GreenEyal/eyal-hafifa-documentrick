@@ -1,7 +1,7 @@
 package transformers;
 
 public abstract class StringTransformation implements IStringTransformer {
-    private IStringTransformer transformer;
+    protected IStringTransformer transformer;
 
     public StringTransformation(IStringTransformer transformer) {
         this.transformer = transformer;

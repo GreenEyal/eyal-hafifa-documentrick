@@ -4,7 +4,6 @@ import transformers.IStringTransformer;
 import transformers.StringTransformation;
 
 public class Enclose extends StringTransformation {
-    private IStringTransformer transformer;
     private Encloser encloser;
 
     public Enclose(IStringTransformer transformer, String encloseString, String encloseByString) {
