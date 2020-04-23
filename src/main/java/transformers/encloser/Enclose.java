@@ -11,6 +11,7 @@ public class Enclose extends StringTransformation {
         this.encloser = new Encloser(encloseString, encloseByString);
     }
 
+    @Override
     public String transform(String input) {
         return encloser.enclose(transformer.transform(input));
     }
