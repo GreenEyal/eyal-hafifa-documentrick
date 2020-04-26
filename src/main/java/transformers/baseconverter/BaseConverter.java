@@ -11,26 +11,29 @@ import java.util.regex.Pattern;
 
 public class BaseConverter {
     private ConverterContext converter;
-    private String base;
+    private String baseNotation;
 
     public BaseConverter(String conversionBase) throws InvalidConversionBaseException {
         switch (conversionBase) {
             case "d":
                 converter = new ConverterContext(new DecimalConverter());
+                baseNotation = "";
                 break;
             case "b":
                 converter = new ConverterContext(new BinaryConverter());
+                baseNotation = "0b";
                 break;
             case "o":
                 converter = new ConverterContext(new OctalConverter());
+                baseNotation = "0";
                 break;
             case "h":
                 converter = new ConverterContext(new HexConverter());
+                baseNotation = "0x";
                 break;
             default:
                 throw new InvalidConversionBaseException("Invalid conversion base given: '" + conversionBase + "'. Expected one of d/b/o/h");
         }
-        this.base = conversionBase;
     }
 
     public String convert(String input) {
@@ -38,7 +41,7 @@ public class BaseConverter {
         Matcher matcher = pattern.matcher(input);
         StringBuffer stringBuffer = new StringBuffer();
         while (matcher.find()) {
-            matcher.appendReplacement(stringBuffer, converter.convert(matcher.group(1)));
+            matcher.appendReplacement(stringBuffer, baseNotation + converter.convert(matcher.group(1)));
         }
         matcher.appendTail(stringBuffer);
         return stringBuffer.toString();
