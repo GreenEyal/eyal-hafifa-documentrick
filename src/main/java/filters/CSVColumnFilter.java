@@ -9,7 +9,8 @@ public class CSVColumnFilter extends FilterBooleanLogic {
     //Static? final? what if given as arguments
     private static final int COLUMN_RESET_INDEX = 1;
     private static final char QUOTE_CHARACTER = '"';
-    private static final char DELIMETER = ',';
+    private static final char DELIMITER = ',';
+    private static final char NEWLINE_CHARACTER = '\n';
 
     public CSVColumnFilter(StatefulFilterInputStream reader, int acceptedColumn) {
         super(reader);
@@ -17,18 +18,18 @@ public class CSVColumnFilter extends FilterBooleanLogic {
         currentColumn = 1;
         inQuotes = false;
     }
-    // Improper use of constants
+
     public int read() throws IOException {
         int charValue = filterInputStream.read();
         char ch = (char) charValue;
         isAccepting = (currentColumn == acceptedColumn);
-        if (!inQuotes && ch == ',')
+        if (!inQuotes && ch == DELIMITER) {
             isAccepting = false;
+            currentColumn++;
+        }
         if (ch == QUOTE_CHARACTER) {
             inQuotes = !inQuotes;
-        } else if (!inQuotes && ch == ',') {
-            currentColumn++;
-        } else if (ch == '\n') {
+        } else if (ch == NEWLINE_CHARACTER) {
             currentColumn = COLUMN_RESET_INDEX;
         }
         return charValue;
