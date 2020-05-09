@@ -1,5 +1,7 @@
 package filters;
 
+import java.io.InputStreamReader;
+
 /*
   This abstract class allows its child filter classes to wrap each other and use the appropriate
   filtering logic so as to take into consideration the state of all filters wrapping each other.
@@ -15,5 +17,9 @@ public abstract class FilterBooleanLogic extends StatefulFilterInputStream {
     @Override
     public boolean isAccepting() {
         return isAccepting && filterInputStream.isAccepting();
+    }
+
+    public void setReader(InputStreamReader reader) {
+        filterInputStream.setReader(reader);
     }
 }
