@@ -6,9 +6,6 @@ import transformers.baseconverter.strategies.DecimalConverter;
 import transformers.baseconverter.strategies.HexConverter;
 import transformers.baseconverter.strategies.OctalConverter;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class BaseConverter {
     private ConverterContext converter;
     private String baseNotation;
@@ -37,14 +34,7 @@ public class BaseConverter {
     }
 
     public String convert(String input) {
-        Pattern pattern = Pattern.compile("(\\d+)");
-        Matcher matcher = pattern.matcher(input);
-        StringBuffer stringBuffer = new StringBuffer();
-        while (matcher.find()) {
-            matcher.appendReplacement(stringBuffer, baseNotation + converter.convert(matcher.group(1)));
-        }
-        matcher.appendTail(stringBuffer);
-        return stringBuffer.toString();
+        return baseNotation + converter.convert(input);
     }
 
 }

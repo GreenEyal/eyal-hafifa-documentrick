@@ -1,18 +1,32 @@
 package transformers.characterescaper;
 
-import transformers.IStringTransformer;
-import transformers.StringTransformation;
+import transformers.FilterableInputStreamTransformation;
+import transformers.IFilterableInputStreamTransformer;
 
-public class EscapeCharacter extends StringTransformation {
+import java.io.IOException;
+
+public class EscapeCharacter extends FilterableInputStreamTransformation {
     private CharacterEscaper escaper;
 
-    public EscapeCharacter(IStringTransformer transformer, String characters) {
+    public EscapeCharacter(IFilterableInputStreamTransformer transformer, String characters) {
         super(transformer);
         this.escaper = new CharacterEscaper(characters);
     }
 
     @Override
-    public String transform(String input) {
-        return escaper.escapeCharacters(transformer.transform(input));
+    public int read() throws IOException {
+        if (!buffer.isEmpty()) {
+            return buffer.remove();
+        }
+        int charValue = transformer.read();
+        char ch = (char) charValue;
+        if (escaper.getCharactersToEscape().contains(Character.toString(ch)) && isAccepting()) {
+            String transformedOutput = escaper.escapeCharacter(ch);
+            for (char character : transformedOutput.toCharArray()) {
+                addToBuffer(character);
+            }
+            return buffer.remove();
+        }
+        return charValue;
     }
 }

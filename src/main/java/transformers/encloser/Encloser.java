@@ -12,4 +12,8 @@ public class Encloser {
     public String enclose(String input) {
         return input.replaceAll(encloseString, encloseByString + encloseString + encloseByString);
     }
+
+    public String getEncloseString() {
+        return this.encloseString;
+    }
 }
